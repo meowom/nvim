@@ -37,16 +37,16 @@ return {
     end
   },
 
-  {
-    "kylechui/nvim-surround",
-    version = "*", -- Use for stability; omit to use `main` branch for the latest features
-    event = "VeryLazy",
-    config = function()
-      require("nvim-surround").setup({
-        -- Configuration here, or leave empty to use defaults
-      })
-    end
-  },
+  -- {
+  --   "kylechui/nvim-surround",
+  --   version = "*", -- Use for stability; omit to use `main` branch for the latest features
+  --   event = "VeryLazy",
+  --   config = function()
+  --     require("nvim-surround").setup({
+  --       -- Configuration here, or leave empty to use defaults
+  --     })
+  --   end
+  -- },
 
   {
     "L3MON4D3/LuaSnip",
@@ -116,24 +116,22 @@ return {
         }
       )
     end
+  },
+
+  {
+    'michaeljsmith/vim-indent-object'
+  },
+
+  {
+    'wellle/targets.vim'
+  },
+
+  {
+    'tpope/vim-surround'
   }
 
 
-  -- {
-  --   "jose-elias-alvarez/null-ls.nvim",
-  --   config = function()
-  --     local null_ls = require("null-ls")
-  --
-  --     null_ls.setup({
-  --       sources = {
-  --         null_ls.builtins.completion.luasnip,
-  --       },
-  --     })
-  --   end
-  -- }
-  --
-  --
-  --
+
   -- {
   --   enabled = true,
   --   'echasnovski/mini.ai',
@@ -169,7 +167,24 @@ return {
   --       }
   --     )
   --   end
-  -- },
+  -- }
+
+
+  -- {
+  --   "jose-elias-alvarez/null-ls.nvim",
+  --   config = function()
+  --     local null_ls = require("null-ls")
+  --
+  --     null_ls.setup({
+  --       sources = {
+  --         null_ls.builtins.completion.luasnip,
+  --       },
+  --     })
+  --   end
+  -- }
+  --
+  --
+  --
 
   -- {
   --   'echasnovski/mini.comment',
