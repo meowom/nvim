@@ -187,6 +187,12 @@ return {
   },
 
   {
+    'https://github.com/windwp/nvim-autopairs',
+    event = 'VeryLazy',
+    config = function() require("nvim-autopairs").setup {} end
+  },
+
+  {
     'michaeljsmith/vim-indent-object'
   },
 
@@ -198,4 +204,3 @@ return {
     'tpope/vim-surround'
   },
 }
-
