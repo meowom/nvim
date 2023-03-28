@@ -5,7 +5,7 @@ return {
     event = { "BufReadPost", "BufNewFile" },
     dependencies = {
       -- "nvim-treesitter/nvim-treesitter-textobjects",
-      "andymass/vim-matchup",
+      -- "andymass/vim-matchup",
     },
     config = function()
       require("nvim-treesitter.configs").setup {
@@ -32,11 +32,11 @@ return {
         --   },
         -- },
 
-        matchup = {
-          enable = true,       -- mandatory, false will disable the whole extension
-          -- disable = { "c", "ruby" }, -- optional, list of language that will be disabled
-          -- [options]
-        },
+        -- matchup = {
+        --   enable = true,       -- mandatory, false will disable the whole extension
+        --   -- disable = { "c", "ruby" }, -- optional, list of language that will be disabled -- 
+        --   -- [options]
+        -- },
       }
     end
   }
