@@ -22,10 +22,17 @@ return {
     "neovim/nvim-lspconfig",
     event = { "BufReadPre", "BufNewFile" },
     config = function()
+      -- Set up lspconfig.
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
       -- Setup language servers.
       local lspconfig = require('lspconfig')
-      lspconfig.lua_ls.setup {}
-      lspconfig.tsserver.setup {}
+      lspconfig.lua_ls.setup {
+        capabilities = capabilities
+      }
+      lspconfig.tsserver.setup {
+        capabilities = capabilities
+      }
       -- Server-specific settings. See `:help lspconfig-setup`
 
 
@@ -52,12 +59,15 @@ return {
           vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = ev.buf, desc = 'lsp hover' })
           vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, { buffer = ev.buf, desc = 'lsp implementation' })
           --          vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-          vim.keymap.set('n', '<leader>wwa', vim.lsp.buf.add_workspace_folder, { buffer = ev.buf, desc = 'lsp add workspace folder' })
-          vim.keymap.set('n', '<leader>wwr', vim.lsp.buf.remove_workspace_folder, { buffer = ev.buf, desc = 'lsp remove workspave folder' })
+          vim.keymap.set('n', '<leader>wwa', vim.lsp.buf.add_workspace_folder,
+            { buffer = ev.buf, desc = 'lsp add workspace folder' })
+          vim.keymap.set('n', '<leader>wwr', vim.lsp.buf.remove_workspace_folder,
+            { buffer = ev.buf, desc = 'lsp remove workspave folder' })
           vim.keymap.set('n', '<leader>lwl', function()
             print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
           end, { buffer = ev.buf, desc = 'lsp list workspace folders' })
-          vim.keymap.set('n', '<leader>ld', vim.lsp.buf.type_definition, { buffer = ev.buf, desc = 'lsp type definition' })
+          vim.keymap.set('n', '<leader>ld', vim.lsp.buf.type_definition,
+            { buffer = ev.buf, desc = 'lsp type definition' })
           vim.keymap.set('n', '<leader>lrn', vim.lsp.buf.rename, { buffer = ev.buf, desc = 'lsp rename' })
           vim.keymap.set('n', '<leader>lca', vim.lsp.buf.code_action, { buffer = ev.buf, desc = 'lsp code action' })
           vim.keymap.set('n', '<leader>lgr', vim.lsp.buf.references, { buffer = ev.buf, desc = 'lsp references' })

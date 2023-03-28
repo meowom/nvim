@@ -1,4 +1,102 @@
 return {
+
+  {
+    "L3MON4D3/LuaSnip",
+    event = 'VeryLazy',
+    dependencies = {
+      "rafamadriz/friendly-snippets",
+      config = function()
+        require("luasnip.loaders.from_vscode").lazy_load()
+      end,
+    },
+    opts = {
+      history = true,
+      delete_check_events = "TextChanged",
+    },
+    config = function()
+      -- require("luasnip.loaders.from_vscode").lazy_load()
+      vim.cmd('source ~/.config/nvim/lua/meow/config/luasnip-keymap.vim')
+    end
+  },
+
+  {
+    'hrsh7th/nvim-cmp',
+    event = 'VeryLazy',
+    dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+      "saadparwaiz1/cmp_luasnip",
+    },
+
+    config = function()
+      -- Set up nvim-cmp.
+      local cmp = require 'cmp'
+
+      cmp.setup({
+        snippet = {
+          -- REQUIRED - you must specify a snippet engine
+          expand = function(args)
+            -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+            require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+            -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+            -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+          end,
+        },
+        completion = {
+          autocomplete = false
+        },
+        window = {
+          -- completion = cmp.config.window.bordered(),
+          -- documentation = cmp.config.window.bordered(),
+        },
+        mapping = cmp.mapping.preset.insert({
+          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<A-a>'] = cmp.mapping.complete(),
+          -- ['<C-Space>'] = cmp.mapping.complete(),
+          ['<C-e>'] = cmp.mapping.abort(),
+          ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+        }),
+        sources = cmp.config.sources({
+          { name = 'nvim_lsp' },
+          -- { name = 'vsnip' }, -- For vsnip users.
+          { name = 'luasnip' }, -- For luasnip users.
+          -- { name = 'ultisnips' }, -- For ultisnips users.
+          -- { name = 'snippy' }, -- For snippy users.
+        }, {
+          { name = 'buffer' },
+        })
+      })
+
+      -- Set configuration for specific filetype.
+      -- cmp.setup.filetype('gitcommit', {
+      --   sources = cmp.config.sources({
+      --     { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+      --   }, {
+      --     { name = 'buffer' },
+      --   })
+      -- })
+
+      -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+      -- cmp.setup.cmdline({ '/', '?' }, {
+      --   mapping = cmp.mapping.preset.cmdline(),
+      --   sources = {
+      --     { name = 'buffer' }
+      --   }
+      -- })
+
+      -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+      -- cmp.setup.cmdline(':', {
+      --   mapping = cmp.mapping.preset.cmdline(),
+      --   sources = cmp.config.sources({
+      --     { name = 'path' }
+      --   }, {
+      --     { name = 'cmdline' }
+      --   })
+      -- })
+    end
+  },
+
   {
     'echasnovski/mini.splitjoin',
     version = false,
@@ -34,36 +132,6 @@ return {
           },
         }
       )
-    end
-  },
-
-  -- {
-  --   "kylechui/nvim-surround",
-  --   version = "*", -- Use for stability; omit to use `main` branch for the latest features
-  --   event = "VeryLazy",
-  --   config = function()
-  --     require("nvim-surround").setup({
-  --       -- Configuration here, or leave empty to use defaults
-  --     })
-  --   end
-  -- },
-
-  {
-    "L3MON4D3/LuaSnip",
-    event = 'VeryLazy',
-    dependencies = {
-      "rafamadriz/friendly-snippets",
-      config = function()
-        require("luasnip.loaders.from_vscode").lazy_load()
-      end,
-    },
-    opts = {
-      history = true,
-      delete_check_events = "TextChanged",
-    },
-    config = function()
-      -- require("luasnip.loaders.from_vscode").lazy_load()
-      vim.cmd('source ~/.config/nvim/lua/meow/config/luasnip-keymap.vim')
     end
   },
 
@@ -128,244 +196,6 @@ return {
 
   {
     'tpope/vim-surround'
-  }
-
-
-
-  -- {
-  --   enabled = true,
-  --   'echasnovski/mini.ai',
-  --   version = false,
-  --   event = 'VeryLazy',
-  --   config = function()
-  --     require("mini.ai").setup(
-  --     -- No need to copy this inside `setup()`. Will be used automatically.
-  --       {
-  --         -- Table with textobject id as fields, textobject specification as values.
-  --         -- Also use this to disable builtin textobjects. See |MiniAi.config|.
-  --         custom_textobjects = nil,
-  --         -- Module mappings. Use `''` (empty string) to disable one.
-  --         mappings = {
-  --           -- Main textobject prefixes
-  --           around = 'a',
-  --           inside = 'i',
-  --           -- Next/last variants
-  --           around_next = 'an',
-  --           inside_next = 'in',
-  --           around_last = 'al',
-  --           inside_last = 'il',
-  --           -- Move cursor to corresponding edge of `a` textobject
-  --           goto_left = 'g[',
-  --           goto_right = 'g]',
-  --         },
-  --         -- Number of lines within which textobject is searched
-  --         n_lines = 50,
-  --         -- How to search for object (first inside current line, then inside
-  --         -- neighborhood). One of 'cover', 'cover_or_next', 'cover_or_prev',
-  --         -- 'cover_or_nearest', 'next', 'previous', 'nearest'.
-  --         search_method = 'cover_or_next',
-  --       }
-  --     )
-  --   end
-  -- }
-
-
-  -- {
-  --   "jose-elias-alvarez/null-ls.nvim",
-  --   config = function()
-  --     local null_ls = require("null-ls")
-  --
-  --     null_ls.setup({
-  --       sources = {
-  --         null_ls.builtins.completion.luasnip,
-  --       },
-  --     })
-  --   end
-  -- }
-  --
-  --
-  --
-
-  -- {
-  --   'echasnovski/mini.comment',
-  --   event = 'VeryLazy',
-  --   config = function()
-  --     require("mini.comment").setup(
-  --     -- No need to copy this inside `setup()`. Will be used automatically.
-  --       {
-  --         -- Options which control module behavior
-  --         options = {
-  --           -- Whether to ignore blank lines when adding comment
-  --           ignore_blank_line = false,
-  --           -- Whether to recognize as comment only lines without indent
-  --           start_of_line = false,
-  --           -- Whether to ensure single space pad for comment parts
-  --           pad_comment_parts = true,
-  --         },
-  --         -- Module mappings. Use `''` (empty string) to disable one.
-  --         mappings = {
-  --           -- Toggle comment (like `gcip` - comment inner paragraph) for both
-  --           -- Normal and Visual modes
-  --           comment = 'gc',
-  --           -- Toggle comment on current line
-  --           comment_line = 'gcc',
-  --           -- Define 'comment' textobject (like `dgc` - delete whole comment block)
-  --           textobject = 'gc',
-  --         },
-  --         -- Hook functions to be executed at certain stage of commenting
-  --         hooks = {
-  --           -- Before successful commenting. Does nothing by default.
-  --           pre = function()
-  --           end,
-  --           -- After successful commenting. Does nothing by default.
-  --           post = function()
-  --           end,
-  --         },
-  --       }
-  --     )
-  --   end
-  -- },
-
-  -- {
-  --   'echasnovski/mini.surround',
-  --   event = 'VeryLazy',
-  --   config = function()
-  --     require('mini.surround').setup(
-  --     -- No need to copy this inside `setup()`. Will be used automatically.
-  --       {
-  --         -- Add custom surroundings to be used on top of builtin ones. For more
-  --         -- information with examples, see `:h MiniSurround.config`.
-  --         custom_surroundings = nil,
-  --         -- Duration (in ms) of highlight when calling `MiniSurround.highlight()`
-  --         highlight_duration = 3000,
-  --         -- Module mappings. Use `''` (empty string) to disable one.
-  --         mappings = {
-  --           add = 'sa',            -- Add surrounding in Normal and Visual modes
-  --           delete = 'sd',         -- Delete surrounding
-  --           find = 'sf',           -- Find surrounding (to the right)
-  --           find_left = 'sF',      -- Find surrounding (to the left)
-  --           highlight = 'sh',      -- Highlight surrounding
-  --           replace = 'sr',        -- Replace surrounding
-  --           update_n_lines = 'sn', -- Update `n_lines`
-  --           suffix_last = 'l',     -- Suffix to search with "prev" method
-  --           suffix_next = 'n',     -- Suffix to search with "next" method
-  --         },
-  --         -- Number of lines within which surrounding is searched
-  --         n_lines = 20,
-  --         -- Whether to respect selection type:
-  --         -- - Place surroundings on separate lines in linewise mode.
-  --         -- - Place surroundings on each line in blockwise mode.
-  --         respect_selection_type = false,
-  --         -- How to search for surrounding (first inside current line, then inside
-  --         -- neighborhood). One of 'cover', 'cover_or_next', 'cover_or_prev',
-  --         -- 'cover_or_nearest', 'next', 'prev', 'nearest'. For more details,
-  --         -- see `:h MiniSurround.config`.
-  --         search_method = 'cover',
-  --       }
-  --
-  --     )
-  --   end
-  -- },
-
-  -- {
-  --   'echasnovski/mini.completion',
-  --   config = function()
-  --     require("mini.completion").setup(
-  --     -- No need to copy this inside `setup()`. Will be used automatically.
-  --       {
-  --         -- Delay (debounce type, in ms) between certain Neovim event and action.
-  --         -- This can be used to (virtually) disable certain automatic actions by
-  --         -- setting very high delay time (like 10^7).
-  --         delay = { completion = 300, info = 100, signature = 50 },
-  --         -- Configuration for action windows:
-  --         -- - `height` and `width` are maximum dimensions.
-  --         -- - `border` defines border (as in `nvim_open_win()`).
-  --         window = {
-  --           info = { height = 25, width = 80, border = 'none' },
-  --           signature = { height = 25, width = 80, border = 'none' },
-  --         },
-  --         -- Way of how module does LSP completion
-  --         lsp_completion = {
-  --           -- `source_func` should be one of 'completefunc' or 'omnifunc'.
-  --           source_func = 'omnifunc',
-  --           -- `auto_setup` should be boolean indicating if LSP completion is set up
-  --           -- on every `BufEnter` event.
-  --           auto_setup = true,
-  --           -- `process_items` should be a function which takes LSP
-  --           -- 'textDocument/completion' response items and word to complete. Its
-  --           -- output should be a table of the same nature as input items. The most
-  --           -- common use-cases are custom filtering and sorting. You can use
-  --           -- default `process_items` as `MiniCompletion.default_process_items()`.
-  --           -- process_items = --<function: filters out snippets; sorts by LSP specs>,
-  --         },
-  --         -- Fallback action. It will always be run in Insert mode. To use Neovim's
-  --         -- built-in completion (see `:h ins-completion`), supply its mapping as
-  --         -- string. Example: to use 'whole lines' completion, supply '<C-x><C-l>'.
-  --         -- fallback_action = --<function: like `<C-n>` completion>,
-  --
-  --         -- Module mappings. Use `''` (empty string) to disable one. Some of them
-  --         -- might conflict with system mappings.
-  --         mappings = {
-  --           force_twostep = '<C-a>',  -- Force two-step completion
-  --           force_fallback = '<A-a>', -- Force fallback completion
-  --         },
-  --         -- Whether to set Vim's settings for better experience (modifies
-  --         -- `shortmess` and `completeopt`)
-  --         set_vim_settings = true,
-  --       }
-  --     )
-  --     vim.g.minicompletion_disable = true
-  --   end
-  -- },
-
-
-  -- {
-  --   'echasnovski/mini.indentscope',
-  --   event = 'VeryLazy',
-  --   config = function()
-  --     require("mini.indentscope").setup(
-  --     -- No need to copy this inside `setup()`. Will be used automaticindentscope
-  --       {
-  --         -- Draw options
-  --         draw = {
-  --           -- Delay (in ms) between event and start of drawing scope indicator
-  --           delay = 100,
-  --           -- Animation rule for scope's first drawing. A function which, given
-  --           -- next and total step numbers, returns wait time (in ms). See
-  --           -- |MiniIndentscope.gen_animation| for builtin options. To disable
-  --           -- animation, use `require('mini.indentscope').gen_animation.none()`.
-  --           -- animation = --<function: implements constant 20ms between steps>,
-  --
-  --           -- Symbol priority. Increase to display on top of more symbols.
-  --           priority = 2,
-  --         },
-  --         -- Module mappings. Use `''` (empty string) to disable one.
-  --         mappings = {
-  --           -- Textobjects
-  --           object_scope = 'ii',
-  --           object_scope_with_border = 'ai',
-  --           -- Motions (jump to respective border line; if not present - body line)
-  --           goto_top = '[i',
-  --           goto_bottom = ']i',
-  --         },
-  --         -- Options which control scope computation
-  --         options = {
-  --           -- Type of scope's border: which line(s) with smaller indent to
-  --           -- categorize as border. Can be one of: 'both', 'top', 'bottom', 'none'.
-  --           border = 'both',
-  --           -- Whether to use cursor column when computing reference indent.
-  --           -- Useful to see incremental scopes with horizontal cursor movements.
-  --           indent_at_cursor = true,
-  --           -- Whether to first check input line to be a border of adjacent scope.
-  --           -- Use it if you want to place cursor on function header to get scope of
-  --           -- its body.
-  --           try_as_border = false,
-  --         },
-  --         -- Which character to use for drawing scope indicator
-  --         symbol = '╎',
-  --       }
-  --     )
-  --     vim.g.miniindentscope_disable = true
-  --   end
-  -- },
+  },
 }
+
